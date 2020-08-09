@@ -75,31 +75,15 @@ EmployeeID Name Title EmployeeLevel
 select * from MyEmployees;
 
 with CTE as (
-	select EmployeeID, FirstName, LastName, Title, DeptID, ManagerID, 1 as EmployeeLevel
+	select EmployeeID, FirstName, LastName, Title, DeptID, ManagerID, 1 as EmployeeLevel, cast('' as varchar) as "Test"
 	from MyEmployees 
 	where ManagerID is null
 
 	union all
 
-	select me.EmployeeID, me.FirstName, me.LastName, me.Title, me.DeptID, me.ManagerID, EmployeeLevel + 1
+	select me.EmployeeID, me.FirstName, me.LastName, me.Title, me.DeptID, me.ManagerID, EmployeeLevel + 1, cast(c."Test" +'|'+cast(me.EmployeeID as varchar) as varchar) as "Test"
 	from MyEmployees me
 	inner join CTE c on c.EmployeeID = me.ManagerID
 )
-select EmployeeID, FirstName, Title, EmployeeLevel from CTE
---select * from CTE
-order by EmployeeLevel
-
-/*with CTE as (
-  select EmployeeID, FirstName, LastName, Title, DeptID, ManagerID, 0 as EmployeeLevel, cast('' as varchar) as col
-  from MyEmployees 
-  where ManagerID is null
-
-  union all
-
-  select me.EmployeeID, me.FirstName, me.LastName, me.Title, me.DeptID, me.ManagerID, c.EmployeeLevel + 1, cast(cast(c.EmployeeLevel as varchar) +'.' + cast(c.EmployeeLevel + 1 as varchar) as varchar) as col
-  from MyEmployees me
-  inner join CTE c on c.EmployeeID = me.ManagerID
-)
-select EmployeeID, FirstName, Title, EmployeeLevel from CTE
---select * from CTE
-order by col*/
+select EmployeeID, replicate(' I ',EmployeeLevel-1) + FirstName + LastName as Name, Title, EmployeeLevel from CTE
+order by "Test", Name

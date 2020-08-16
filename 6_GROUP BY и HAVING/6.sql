@@ -85,5 +85,22 @@ with CTE as (
 	from MyEmployees me
 	inner join CTE c on c.EmployeeID = me.ManagerID
 )
-select EmployeeID, replicate(' I ',EmployeeLevel-1) + FirstName + LastName as Name, Title, EmployeeLevel from CTE
+select EmployeeID, replicate(' I ',EmployeeLevel-1) + FirstName + LastName as Name, Title, EmployeeLevel
+into #TemporaryTable
+from CTE
 order by "Test", Name
+
+select * from #TemporaryTable
+
+
+DECLARE @TableVariable TABLE
+	(EmployeeID smallint NOT NULL,
+	Name nvarchar(40) NOT NULL,
+	Title nvarchar(50) NOT NULL,
+	EmployeeLevel smallint NOT NULL
+);
+INSERT INTO @TableVariable
+(EmployeeID, Name, Title, EmployeeLevel)
+select * from #TemporaryTable
+
+select * from @TableVariable

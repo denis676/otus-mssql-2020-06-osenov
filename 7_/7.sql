@@ -181,7 +181,7 @@ WHEN NOT MATCHED
 --5 Напишите запрос, который выгрузит данные через bcp out и загрузить через bulk insert
 
 --экспорт из табл в txt-файл
-exec master..xp_cmdshell 'bcp "[WideWorldImporters].Sales.InvoiceLines" out  "D:\InvoiceLines15.txt" -T -w -t; -S UFA-OSENOVDD\SQL2019'
+exec master..xp_cmdshell 'bcp "[WideWorldImporters].Sales.InvoiceLines" out  "D:\DemoTable.txt" -T -w -t; -S UFA-OSENOVDD\SQL2019'
 
 -- удалить табл если есть
 drop table if exists [Sales].[InvoiceLines_BulkDemo]
@@ -211,7 +211,7 @@ select * from [Sales].[InvoiceLines_BulkDemo]
 
 --Импорт из файла
 BULK INSERT [WideWorldImporters].[Sales].[InvoiceLines_BulkDemo]
-FROM "D:\InvoiceLines15.txt"
+FROM "D:\DemoTable.txt"
 WITH 
 	(
 	BATCHSIZE = 1000, 
